@@ -4,7 +4,7 @@
 
 This project is a configurable data cleaning pipeline framework that allows users to process datasets and ensure data quality. The framework includes a library of atomic data cleaning tasks and supports API-based configuration and execution.
 
-##Also check etl_script.py for given dataset in assingment used the object oriented and/or functional programming paradigm. 
+## Also check etl_script.py for given dataset in assingment used the object oriented and/or functional programming paradigm. 
 
 ## Features
 
