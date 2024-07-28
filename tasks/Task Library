@@ -1,0 +1,40 @@
+from abc import ABC, abstractmethod
+from pyspark.sql import DataFrame
+
+class DataCleaningTask(ABC):
+    @abstractmethod
+    def execute(self, df: DataFrame) -> DataFrame:
+        pass
+
+    @abstractmethod
+    def log_results(self):
+        pass
+
+class IdentifyMissingValuesTask(DataCleaningTask):
+    def __init__(self, columns, threshold):
+        self.columns = columns
+        self.threshold = threshold
+        self.results = {}
+
+    def execute(self, df: DataFrame) -> DataFrame:
+        for column in self.columns:
+            missing_count = df.filter(df[column].isNull()).count()
+            total_count = df.count()
+            missing_percentage = (missing_count / total_count) * 100
+            self.results[column] = missing_percentage
+        return df
+
+    def log_results(self):
+        print(f"Missing Values Results: {self.results}")
+
+class IdentifyDuplicateRowsTask(DataCleaningTask):
+    def __init__(self, columns):
+        self.columns = columns
+        self.duplicates_count = 0
+
+    def execute(self, df: DataFrame) -> DataFrame:
+        self.duplicates_count = df.count() - df.dropDuplicates(self.columns).count()
+        return df
+
+    def log_results(self):
+        print(f"Duplicate Rows Count: {self.duplicates_count}")
